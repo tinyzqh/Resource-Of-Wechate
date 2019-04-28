@@ -1,6 +1,10 @@
 # Resource-Of-Wechate
 个人公众微信号上的资源，包括代码，文档等
 
+#### 编辑
+- [ChuanXi Chen](https://github.com/HandsomeAIccx)
+- [Wenrui Xie]()
+
 #### 历史文章
 - [目标检测之R-CNN、Faster R-CNN入门](https://mp.weixin.qq.com/s/uxJSKOtj24Zm3IatUgf-Yw)
 - [OpenAI重磅开源多智能体博弈环境 Neural MMO](https://mp.weixin.qq.com/s/j1ZRnIYIeJ9Bvm76ZrMaxQ)
