@@ -3,7 +3,7 @@
 
 #### 编辑
 - [ChuanXi Chen](https://github.com/HandsomeAIccx)
-- [Wenrui Xie]()
+- [Wenrui Xie](https://github.com/xwr96)
 
 #### 历史文章
 - [目标检测之R-CNN、Faster R-CNN入门](https://mp.weixin.qq.com/s/uxJSKOtj24Zm3IatUgf-Yw)
