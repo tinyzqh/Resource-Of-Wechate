@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # /usr/bin/python3
-
-
 import numpy as np
+import tensorflow as tf
 import argparse
 class params():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--state_size', default=29, type=int)
+    parser.add_argument('--state_size', default=28, type=int)
     parser.add_argument('--d_model', default=512, type=int,
                         help="hidden dimension of encoder/decoder")
     parser.add_argument('--dropout_rate', default=0.5, type=float)
@@ -17,6 +16,9 @@ class params():
     parser.add_argument('--d_ff', default=2048, type=int,
                         help="hidden dimension of feedforward layer")
 class Transform():
+    hparams = params()
+    parser = hparams.parser
+    hp = parser.parse_args()
     def ln(self, inputs, epsilon=1e-8, scope="ln"):
         '''Applies layer normalization. See https://arxiv.org/abs/1607.06450.
         inputs: A tensor with 2 or more dimensions, where the first dimension has `batch_size`.
@@ -140,7 +142,6 @@ class Transform():
 
         return outputs
 
-
     def multihead_attention(self, queries, keys, values,
                             num_heads=8,
                             dropout_rate=0,
@@ -221,44 +222,35 @@ class Transform():
 
             # embedding
             # enc = tf.nn.embedding_lookup(self_embeddings, xs) # (N, T1, d_model)
-            enc = tf.layers.dense(xs, hp.d_model, activation=None)
-            enc = tf.reshape(enc, shape=[-1, 10, hp.d_model])
-            enc *= hp.d_model**0.5 # scale
+            enc = tf.layers.dense(xs, self.hp.d_model, activation=None)
+            enc = tf.reshape(enc, shape=[-1, 28, self.hp.d_model])
+            enc *= self.hp.d_model**0.5 # scale
 
             # enc += positional_encoding(enc, self.hp.maxlen1)
-            enc = tf.layers.dropout(enc, hp.dropout_rate, training=training)
+            enc = tf.layers.dropout(enc, self.hp.dropout_rate, training=training)
             ## Blocks
-            for i in range(hp.num_blocks):
+            for i in range(self.hp.num_blocks):
                 with tf.variable_scope("num_blocks_{}".format(i), reuse=tf.AUTO_REUSE):
                     # self-attention
                     enc = self.multihead_attention(queries=enc,
                                               keys=enc,
                                               values=enc,
-                                              num_heads=hp.num_heads,
-                                              dropout_rate=hp.dropout_rate,
+                                              num_heads=self.hp.num_heads,
+                                              dropout_rate=self.hp.dropout_rate,
                                               training=training,
                                               causality=False)
                     # feed forward
-                    enc = self.ff(enc, num_units=[hp.d_ff, hp.d_model])
+                    enc = self.ff(enc, num_units=[self.hp.d_ff, self.hp.d_model])
         flatten = tf.layers.flatten(enc)
-        logist = tf.layers.dense(flatten, 1, activation=None)
+        logist = tf.layers.dense(flatten, 10, activation=tf.nn.sigmoid)
         return logist
 if __name__ == "__main__":
 
-    hparams = params()
-    parser = hparams.parser
-    hp = parser.parse_args()
-
     import tensorflow as tf
-    data = np.ones((2, 10, 29))
+    data = np.ones((2, 28, 28))
     inputs = tf.convert_to_tensor(data, tf.float32)
     p = Transform().transform(inputs)
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
         sess.run(init)
         print(sess.run([p]))
-
-
-
-
-
