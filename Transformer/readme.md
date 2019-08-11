@@ -7,83 +7,83 @@
 &emsp;&emsp;但是也存在问题，就是CNN需要叠加很多层。为了解决这个问题，又引入Self-Attention Layer，其输入是一个sequence输出也是一个sequence，能够达到跟RNN一样的功效，输出`b`可以平行同时计算出来。
 
 
-![Self-Attention示意图](2.png)
+![Self-Attention示意图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/2.png)
 
 ## 解决办法 Attention Is All You Need
 
-&emsp;&emsp;其技术最早出现的那篇文章就是[Attention Is All You Need](https://arxiv.org/abs/1706.03762) 。输入首先经过一个embedding输出$a_1-a_4$。输出再乘上三个Matrix：`q`、`k`、`v`。`q`用于match其它输出，`k`用于被match，`v`是抽取出来的信息。
+&emsp;&emsp;其技术最早出现的那篇文章就是[Attention Is All You Need](https://arxiv.org/abs/1706.03762) 。输入首先经过一个embedding输出`$a_1-a_4$`。输出再乘上三个Matrix：`q`、`k`、`v`。`q`用于match其它输出，`k`用于被match，`v`是抽取出来的信息。
 
-![q、k、v生成示意图](3.png)
+![q、k、v生成示意图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/3.png)
 
 &emsp;&emsp;之后拿每一个query `q`去对每个key `k`做attention。Attention是吃两个向量，输出这两个向量有多匹配(输出一个分数)，做Attention的方法有很多种。
 
-![Scaled Dot-Product Attention示意图](4.png)
+![Scaled Dot-Product Attention示意图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/4.png)
 
 &emsp;&emsp;除以$\sqrt{d}$是相当于归一化的处理。之后经过softmax得到$\hat{\alpha}$：
 
-![归一化](5.png)
+![归一化](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/5.png)
 
 &emsp;&emsp;再将$\hat{\alpha}$与`v`相乘得到`b`：
 
-![得到最终结果](6.png)
+![得到最终结果](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/6.png)
 
 &emsp;&emsp;如果self-attention的$\hat{\alpha}$等于0，那么他就会得到local的attention。也就是说attention可以决定看哪些需要的信息。也可以同时用$q^2$做attention之后计算$b^2$。
 
-![计算下一个](7.png)
+![计算下一个](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/7.png)
 
 &emsp;&emsp;从下面矩阵相称的方法里面可以更清楚地看到并行化处理的方式：
 
-![矩阵并行处理-1](8.png)
+![矩阵并行处理-1](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/8.png)
 
-![矩阵并行处理-2](9.png)
+![矩阵并行处理-2](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/9.png)
 
 &emsp;&emsp;更进一步得到：
 
-![矩阵并行处理-3](10.png)
+![矩阵并行处理-3](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/10.png)
 
-![矩阵并行处理-4](11.png)
+![矩阵并行处理-4](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/11.png)
 
 &emsp;&emsp;整个计算流程可以使用下图表示：
 
-![矩阵并行处理-5](12.png)
+![矩阵并行处理-5](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/12.png)
 
 &emsp;&emsp;输入乘以matrix得到query、key和抽取的信息`v`。`K`与`Q`相乘得到Attention后做softmax得到$\hat{a}$，再与`V`相乘得到输出。
  
 &emsp;&emsp;Self-attention有个变形Multi-head。举一个两个head的例子：
 
-![Multi-head Self-attention-1](13.png)
+![Multi-head Self-attention-1](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/13.png)
 
 &emsp;&emsp;$q^{i,1}$与$k^{i,1}$、$k^{j,1}$相乘得到$b^{i,1}$，$q^{i,2}$与$k^{i,2}$、$k^{j,2}$相乘得到$b^{i,2}$。再将两者接起来得到self-attention的输出：
 
-![Multi-head Self-attention-2](14.png)
+![Multi-head Self-attention-2](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/14.png)
 
 &emsp;&emsp;Multi-head Self-attention所期望的就是不同的head能够关注不同的东西，比如有的head关注局部信息，而另外一些关注全局信息。
 
 &emsp;&emsp;对self-attention来说，input的次序是不重要的。这样的话就会导致一个问题，比如说语句“A打了B”跟“B打了A”是一样的。但是我们希望将Input的次序考虑进去。在原始的论文中，作者加入设定的$e^i$(不是学习出来的)来解决这个问题。相当于提供位置资讯。
 
-![位置编码](15.png)
+![位置编码](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/15.png)
 
 ## Transformer使用
 
 &emsp;&emsp;上面讲的是self-attention取代RNN。接下来我们阐述self-attention怎么在seq2seq中使用：
 
-![Sequence to Sequence](16.png)
+![Sequence to Sequence](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/16.png)
 
 &emsp;&emsp;简要来说就是Encoder中的RNN与Decoder中的RNN统统都用Self-Attention来代替。
 
 &emsp;&emsp;Transform的网络结构如下所示：
 
-![Transformer网络结构示意图](17.png)
+![Transformer网络结构示意图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/17.png)
 
 &emsp;&emsp;数据先加上位置关系进入编码器，在编码器中先经过Self-Attention Layer 再通过add和layer norm层。再Decode中输入是前一个time step的output，经过编码和位置编码之后输入到block中，Masked Multi-Head中的Mask用于处理之前发生过的状态做attention。再与之前的Input Embedding得到的输出结合，得到最终的输出。
 
 &emsp;&emsp;更进一步有[Universal Transformer](https://ai.googleblog.com/2018/08/moving-beyond-translation-with.html)。
 
-![Universal Transformer](18.png)
+![Universal Transformer](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/18.png)
 
 &emsp;&emsp;最早Transform用于文字上，现在也可被用于影像上面。[Self-Attention Generative Adversarial Networks](https://arxiv.org/abs/1805.08318)
 
-![Transformer用于影像](19.png)
+![Transformer用于影像](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/19.png)
 
 ## 代码解释
 
