@@ -2,7 +2,7 @@
 
 &emsp;&emsp;处理Seq2seq最常用的就是RNN。RNN的问题在于无法Parallel(并行处理)，可以用CNN解决这个问题，但是CNN能够考虑的特征向量非常少，而解决这个问题又可以通过再次叠加CNN来解决。这样的话CNN就可以解决RNN不能处理Parallel的问题。
 
-![RNN和CNN并行网络结构图](1.png)
+![RNN和CNN并行网络结构图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/1.png)
 
 &emsp;&emsp;但是也存在问题，就是CNN需要叠加很多层。为了解决这个问题，又引入Self-Attention Layer，其输入是一个sequence输出也是一个sequence，能够达到跟RNN一样的功效，输出`b`可以平行同时计算出来。
 
