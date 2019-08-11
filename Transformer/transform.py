@@ -62,20 +62,8 @@ class Transform():
             # scale
             outputs /= d_k ** 0.5
 
-            # key masking
-            outputs = self.mask(outputs, Q, K, type="key")
-
-            # causality or future blinding masking
-            if causality:
-                outputs = self.mask(outputs, type="future")
-
             # softmax
             outputs = tf.nn.softmax(outputs)
-            attention = tf.transpose(outputs, [0, 2, 1])
-            tf.summary.image("attention", tf.expand_dims(attention[:1], -1))
-
-            # query masking
-            outputs = self.mask(outputs, Q, K, type="query")
 
             # dropout
             outputs = tf.layers.dropout(outputs, rate=dropout_rate, training=training)
@@ -85,62 +73,6 @@ class Transform():
 
         return outputs
 
-    def mask(self, inputs, queries=None, keys=None, type=None):
-        """Masks paddings on keys or queries to inputs
-        inputs: 3d tensor. (N, T_q, T_k)
-        queries: 3d tensor. (N, T_q, d)
-        keys: 3d tensor. (N, T_k, d)
-
-        e.g.,
-        >> queries = tf.constant([[[1.],
-                            [2.],
-                            [0.]]], tf.float32) # (1, 3, 1)
-        >> keys = tf.constant([[[4.],
-                         [0.]]], tf.float32)  # (1, 2, 1)
-        >> inputs = tf.constant([[[4., 0.],
-                                   [8., 0.],
-                                   [0., 0.]]], tf.float32)
-        >> mask(inputs, queries, keys, "key")
-        array([[[ 4.0000000e+00, -4.2949673e+09],
-            [ 8.0000000e+00, -4.2949673e+09],
-            [ 0.0000000e+00, -4.2949673e+09]]], dtype=float32)
-        >> inputs = tf.constant([[[1., 0.],
-                                 [1., 0.],
-                                  [1., 0.]]], tf.float32)
-        >> mask(inputs, queries, keys, "query")
-        array([[[1., 0.],
-            [1., 0.],
-            [0., 0.]]], dtype=float32)
-        """
-        padding_num = -2 ** 32 + 1
-        if type in ("k", "key", "keys"):
-            # Generate masks
-            masks = tf.sign(tf.reduce_sum(tf.abs(keys), axis=-1))  # (N, T_k)
-            masks = tf.expand_dims(masks, 1)  # (N, 1, T_k)
-            masks = tf.tile(masks, [1, tf.shape(queries)[1], 1])  # (N, T_q, T_k)
-
-            # Apply masks to inputs
-            paddings = tf.ones_like(inputs) * padding_num
-            outputs = tf.where(tf.equal(masks, 0), paddings, inputs)  # (N, T_q, T_k)
-        elif type in ("q", "query", "queries"):
-            # Generate masks
-            masks = tf.sign(tf.reduce_sum(tf.abs(queries), axis=-1))  # (N, T_q)
-            masks = tf.expand_dims(masks, -1)  # (N, T_q, 1)
-            masks = tf.tile(masks, [1, 1, tf.shape(keys)[1]])  # (N, T_q, T_k)
-
-            # Apply masks to inputs
-            outputs = inputs * masks
-        elif type in ("f", "future", "right"):
-            diag_vals = tf.ones_like(inputs[0, :, :])  # (T_q, T_k)
-            tril = tf.linalg.LinearOperatorLowerTriangular(diag_vals).to_dense()  # (T_q, T_k)
-            masks = tf.tile(tf.expand_dims(tril, 0), [tf.shape(inputs)[0], 1, 1])  # (N, T_q, T_k)
-
-            paddings = tf.ones_like(masks) * padding_num
-            outputs = tf.where(tf.equal(masks, 0), paddings, inputs)
-        else:
-            print("Check if you entered type correctly!")
-
-        return outputs
 
     def multihead_attention(self, queries, keys, values,
                             num_heads=8,
@@ -210,7 +142,7 @@ class Transform():
             # Normalize
             outputs = self.ln(outputs)
 
-        return outputs
+            return outputs
     def transform(self, xs, training=True):
         '''
         Returns
@@ -254,3 +186,4 @@ if __name__ == "__main__":
     with tf.Session() as sess:
         sess.run(init)
         print(sess.run([p]))
+
