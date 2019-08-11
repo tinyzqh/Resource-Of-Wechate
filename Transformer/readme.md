@@ -27,7 +27,7 @@
 
 ![得到最终结果](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/6.png)
 
-&emsp;&emsp;如果self-attention的$\hat{\alpha}$等于0，那么他就会得到local的attention。也就是说attention可以决定看哪些需要的信息。也可以同时用$q^2$做attention之后计算$b^2$。
+&emsp;&emsp;如果self-attention的<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{\alpha}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{\alpha}" title="\hat{\alpha}" /></a>等于0，那么他就会得到local的attention。也就是说attention可以决定看哪些需要的信息。也可以同时用<a href="https://www.codecogs.com/eqnedit.php?latex=q^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?q^2" title="q^2" /></a>做attention之后计算<a href="https://www.codecogs.com/eqnedit.php?latex=b^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?b^2" title="b^2" /></a>。
 
 ![计算下一个](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/7.png)
 
@@ -47,7 +47,7 @@
 
 ![矩阵并行处理-5](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/12.png)
 
-&emsp;&emsp;输入乘以matrix得到query、key和抽取的信息`v`。`K`与`Q`相乘得到Attention后做softmax得到$\hat{a}$，再与`V`相乘得到输出。
+&emsp;&emsp;输入乘以matrix得到query、key和抽取的信息`v`。`K`与`Q`相乘得到Attention后做softmax得到<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{a}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{a}" title="\hat{a}" /></a>，再与`V`相乘得到输出。
  
 &emsp;&emsp;Self-attention有个变形Multi-head。举一个两个head的例子：
 
