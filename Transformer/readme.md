@@ -5,13 +5,13 @@
 ![RNN和CNN并行网络结构图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/1.png)
 
 &emsp;&emsp;但是也存在问题，就是CNN需要叠加很多层。为了解决这个问题，又引入Self-Attention Layer，其输入是一个sequence输出也是一个sequence，能够达到跟RNN一样的功效，输出`b`可以平行同时计算出来。
-<a href="https://www.codecogs.com/eqnedit.php?latex=a_1-a_4" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a_1-a_4" title="a_1-a_4" /></a>
+
 
 ![Self-Attention示意图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/2.png)
 
 ## 解决办法 Attention Is All You Need
 
-&emsp;&emsp;其技术最早出现的那篇文章就是[Attention Is All You Need](https://arxiv.org/abs/1706.03762) 。输入首先经过一个embedding输出`$a_1-a_4$`。输出再乘上三个Matrix：`q`、`k`、`v`。`q`用于match其它输出，`k`用于被match，`v`是抽取出来的信息。
+&emsp;&emsp;其技术最早出现的那篇文章就是[Attention Is All You Need](https://arxiv.org/abs/1706.03762) 。输入首先经过一个embedding输出<a href="https://www.codecogs.com/eqnedit.php?latex=a_1-a_4" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a_1-a_4" title="a_1-a_4" /></a>。输出再乘上三个Matrix：`q`、`k`、`v`。`q`用于match其它输出，`k`用于被match，`v`是抽取出来的信息。
 
 ![q、k、v生成示意图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/3.png)
 
