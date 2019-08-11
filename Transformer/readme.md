@@ -136,7 +136,7 @@ def ln(self, inputs, epsilon=1e-8, scope="ln"):
 ```
 
 &emsp;&emsp;`scaled_dot_product_attention`注意力机制层：
-&emsp;&emsp;其公式是<a href="https://www.codecogs.com/eqnedit.php?latex=\alpha_{1,i}=q^{i}·k^{i}/&space;\sqrt{d}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\alpha_{1,i}=q^{i}，我们下面这个函数就是要实现这个功能。拿到数据之后先获取`d`的维度`d_k`，之后通过`tf.transpose()`函数将数据的第二维变为第一维，第一维度变为第二维度，为与`Q`相乘的矩阵运算做准备。得到最终结果之后除以`d`的开方，这样会对`softmax`反向传播有利。之后再经过`softmax`与`V`相乘。
+&emsp;&emsp;其公式是<a href="https://www.codecogs.com/eqnedit.php?latex=\alpha_{1,i}=q^{i}·k^{i}/&space;\sqrt{d}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\alpha_{1,i}=q^{i}·k^{i}/&space;\sqrt{d}" title="\alpha_{1,i}=q^{i}·k^{i}/ \sqrt{d}" /></a>，我们下面这个函数就是要实现这个功能。拿到数据之后先获取`d`的维度`d_k`，之后通过`tf.transpose()`函数将数据的第二维变为第一维，第一维度变为第二维度，为与`Q`相乘的矩阵运算做准备。得到最终结果之后除以`d`的开方，这样会对`softmax`反向传播有利。之后再经过`softmax`与`V`相乘。
 ```python
 def scaled_dot_product_attention(self, Q, K, V,
                                  causality=False, dropout_rate=0.,
