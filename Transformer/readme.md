@@ -19,11 +19,11 @@
 
 ![Scaled Dot-Product Attention示意图](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/4.png)
 
-&emsp;&emsp;除以$\sqrt{d}$是相当于归一化的处理。之后经过softmax得到$\hat{\alpha}$：
+&emsp;&emsp;除以<a href="https://www.codecogs.com/eqnedit.php?latex=\sqrt{d}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sqrt{d}" title="\sqrt{d}" /></a>是相当于归一化的处理。之后经过softmax得到$\hat{\alpha}$：
 
 ![归一化](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/5.png)
 
-&emsp;&emsp;再将$\hat{\alpha}$与`v`相乘得到`b`：
+&emsp;&emsp;再将<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{\alpha}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{\alpha}" title="\hat{\alpha}" /></a>与`v`相乘得到`b`：
 
 ![得到最终结果](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/6.png)
 
