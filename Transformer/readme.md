@@ -59,7 +59,7 @@
 
 &emsp;&emsp;Multi-head Self-attention所期望的就是不同的head能够关注不同的东西，比如有的head关注局部信息，而另外一些关注全局信息。
 
-&emsp;&emsp;对self-attention来说，input的次序是不重要的。这样的话就会导致一个问题，比如说语句“A打了B”跟“B打了A”是一样的。但是我们希望将Input的次序考虑进去。在原始的论文中，作者加入设定的$e^i$(不是学习出来的)来解决这个问题。相当于提供位置资讯。
+&emsp;&emsp;对self-attention来说，input的次序是不重要的。这样的话就会导致一个问题，比如说语句“A打了B”跟“B打了A”是一样的。但是我们希望将Input的次序考虑进去。在原始的论文中，作者加入设定的<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{a}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{a}"/></a>$e^i$(不是学习出来的)来解决这个问题。相当于提供位置资讯。
 
 ![位置编码](https://github.com/ZhiqiangHo/Resource-Of-Wechate/blob/master/Transformer/figure/15.png)
 
